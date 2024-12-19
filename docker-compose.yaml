@@ -1,0 +1,27 @@
+services:
+  jenkins-server:
+    image: jenkins/jenkins:lts-jdk17
+    container_name: jenkins-server
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+
+  jenkins-agent:
+    image: jenkins/inbound-agent
+    container_name: jenkins-agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - JENKINS_URL=http://jenkins-server:8080
+      - JENKINS_SECRET=e5583f18846d965c7297e3b8b0bf51a4c9efbe331526daad508e32bdef5d1b0b
+      - JENKINS_AGENT_NAME=jenkins-agent
+    restart: always
+
+volumes:
+  jenkins_home:
