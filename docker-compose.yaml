@@ -11,6 +11,7 @@ services:
     restart: always
     environment:
       - DOCKER_HOST=unix:///var/run/docker.sock
+    user: root
 
   jenkins-agent:
     image: jenkins/inbound-agent
