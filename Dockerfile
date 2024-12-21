@@ -1,13 +1,13 @@
-# Базовый образ с Maven и OpenJDK 17 для сборки проекта
+# Используем образ с Maven и OpenJDK 17 для сборки проекта
 FROM maven:3.9.5-eclipse-temurin-17 as build
 
 # Установим рабочую директорию для сборки
 WORKDIR /build
 
-# Скопируем файлы проекта в контейнер
-COPY . .
+# Клонируем репозиторий с GitHub (укажите правильный URL вашего репозитория)
+RUN git clone https://github.com/Zamuruev/jenkins.git .
 
-# Собираем проект с Maven
+# Собираем проект с Maven (без тестов)
 RUN mvn clean package -DskipTests
 
 # Используем минимальный образ с OpenJDK 17 для запуска
@@ -29,8 +29,7 @@ FROM jenkins/inbound-agent
 USER root
 RUN apt-get update && apt-get install -y docker.io
 
-# Добавляем установку Git
-USER root
+# Устанавливаем Git
 RUN apt-get update && apt-get install -y git
 
 # Устанавливаем переменные для Jenkins
