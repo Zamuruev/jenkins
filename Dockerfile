@@ -7,6 +7,11 @@ WORKDIR /build
 # Клонируем репозиторий с GitHub (укажите правильный URL вашего репозитория)
 RUN git clone https://github.com/Zamuruev/jenkins.git .
 
+FROM jenkins/jenkins:lts
+USER root
+RUN apt-get update && apt-get install -y maven
+USER jenkins
+
 # Собираем проект с Maven (без тестов)
 RUN mvn clean package -DskipTests
 
