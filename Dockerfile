@@ -29,6 +29,10 @@ FROM jenkins/inbound-agent
 USER root
 RUN apt-get update && apt-get install -y docker.io
 
+# Добавляем установку Git
+USER root
+RUN apt-get update && apt-get install -y git
+
 # Устанавливаем переменные для Jenkins
 ENV JENKINS_URL=http://jenkins-server:8080
 ENV JENKINS_AGENT_NAME=jenkins-agent
