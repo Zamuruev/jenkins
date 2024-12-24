@@ -22,6 +22,7 @@ services:
       - JENKINS_AGENT_WORKDIR=/home/jenkins/agent
     volumes:
       - agent_workdir:/home/jenkins/agent
+      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - jenkins
     networks:

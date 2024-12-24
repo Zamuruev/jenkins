@@ -1,0 +1,23 @@
+# Базовый образ для jenkins-agent
+FROM jenkins/inbound-agent
+
+# Устанавливаем необходимые зависимости для Docker
+USER root
+RUN apt-get update && apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common \
+    lsb-release \
+    && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
+    && curl -fsSL https://download.docker.com/linux/ubuntu/dists/$(lsb_release -cs)/stable/binary-amd64/Packages -o docker.list \
+    && mv docker.list /etc/apt/sources.list.d/ \
+    && apt-get update \
+    && apt-get install -y docker-ce docker-ce-cli containerd.io \
+    && rm -rf /var/lib/apt/lists/*
+
+# Добавляем пользователя jenkins в группу docker, чтобы он мог запускать Docker-команды
+RUN usermod -aG docker jenkins
+
+# Возвращаемся к пользователю jenkins
+USER jenkins
