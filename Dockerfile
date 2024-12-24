@@ -13,10 +13,11 @@ RUN apt-get update && apt-get install -y \
 # Установка Docker
 RUN curl -fsSL https://get.docker.com | sh
 
-# Установка docker-compose
-RUN curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
+RUN curl -fsSL https://get.docker.com | sh \
+    && curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose \
-    && chown jenkins:jenkins /usr/local/bin/docker-compose  # Даем права пользователю jenkins
+    && chown jenkins:jenkins /usr/local/bin/docker-compose \
+    && docker-compose --version
 
 # Проверка версий Docker и docker-compose
 RUN docker --version && docker-compose --version
