@@ -15,6 +15,9 @@ services:
   jenkins-agent:
     image: jenkins/inbound-agent
     container_name: jenkins-agent
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       - JENKINS_URL=http://jenkins-server:8080
       - JENKINS_AGENT_NAME=jenkins-agent
