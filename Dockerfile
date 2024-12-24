@@ -8,7 +8,9 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     software-properties-common \
     openjdk-17-jdk \
+    jq \
     && apt-get clean
+
 
 # Установка Docker
 RUN curl -fsSL https://get.docker.com | sh
