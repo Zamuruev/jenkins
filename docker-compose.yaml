@@ -1,29 +1,35 @@
 version: '3.8'
 
 services:
-  jenkins-server:
-    image: jenkins/jenkins:lts-jdk17
+  jenkins:
+    image: jenkins/jenkins:lts
     container_name: jenkins-server
     ports:
       - "8080:8080"
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - jenkins-network
 
   jenkins-agent:
-    build:
-      context: .  # Указываем контекст для сборки, это путь к текущей директории
-      dockerfile: Dockerfile  # Указываем на созданный Dockerfile для агента
+    image: jenkins/inbound-agent
     container_name: jenkins-agent
     environment:
       - JENKINS_URL=http://jenkins-server:8080
       - JENKINS_AGENT_NAME=jenkins-agent
-      - JENKINS_SECRET=6e949ac4d495b523c76ad41e8129e07dd15ed57c4426e4bbeb4a4745f3fe61ac  # Убедитесь, что это правильный ключ агента
+      - JENKINS_SECRET=61c547024e109e00a70f099f3517333b850f8079752cdcc26a345a8155707789
+      - JENKINS_AGENT_WORKDIR=/home/jenkins/agent
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - agent_workspace:/home/jenkins/agent  # Точка для работы агента
+      - agent_workdir:/home/jenkins/agent
+    depends_on:
+      - jenkins
+    networks:
+      - jenkins-network
 
 volumes:
   jenkins_home:
-  agent_workspace:
+  agent_workdir:
+
+networks:
+  jenkins-network:
