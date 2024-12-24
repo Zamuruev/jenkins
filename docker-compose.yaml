@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   jenkins-server:
     image: jenkins/jenkins:lts-jdk17
@@ -12,7 +10,9 @@ services:
     restart: always
 
   jenkins-agent:
-    image: jenkins/inbound-agent
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: jenkins-agent
     environment:
       - JENKINS_URL=http://jenkins-server:8080
