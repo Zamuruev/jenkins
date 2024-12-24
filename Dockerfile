@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim as build
 WORKDIR /app
 
 # Копируем собранный JAR-файл в контейнер
-COPY target/app.jar /app/app.jar  # для Maven
+COPY target/app.jar /app/app.jar
 # COPY build/libs/app.jar /app/app.jar  # для Gradle
 
 # Открываем порт, на котором будет работать приложение
