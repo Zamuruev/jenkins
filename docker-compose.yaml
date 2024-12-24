@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   jenkins:
+    build: .
     image: jenkins/jenkins:lts
     container_name: jenkins-server
     ports:
@@ -9,15 +10,16 @@ services:
       - "50000:50000"
     volumes:
       - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - jenkins-network
+    environment:
+      - JENKINS_ADMIN_USER=admin
+      - JENKINS_ADMIN_PASSWORD=admin_password
 
   jenkins-agent:
     image: jenkins/inbound-agent
     container_name: jenkins-agent
-    build:
-      context: .
-      dockerfile: Dockerfile
     environment:
       - JENKINS_URL=http://jenkins-server:8080
       - JENKINS_AGENT_NAME=jenkins-agent
@@ -25,7 +27,6 @@ services:
       - JENKINS_AGENT_WORKDIR=/home/jenkins/agent
     volumes:
       - agent_workdir:/home/jenkins/agent
-      - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - jenkins
     networks:
